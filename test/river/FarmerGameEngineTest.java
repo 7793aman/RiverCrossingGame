@@ -119,4 +119,78 @@ public class FarmerGameEngineTest {
         engine.rowBoat();
         engine.unloadBoat(item);
     }
+
+    @Test
+    public void getNumberOfItems(){
+        Assert.assertEquals(4,engine.numberOfItems());
+    }
+
+    @Test
+    public void getItemColor() {
+        Assert.assertEquals(Color.PINK, engine.getItemColor(Item.ITEM_3));
+        Assert.assertEquals(Color.CYAN, engine.getItemColor(Item.ITEM_2));
+        Assert.assertEquals(Color.CYAN, engine.getItemColor(Item.ITEM_1));
+    }
+
+    @Test
+    public void getItemLabel() {
+        Assert.assertEquals("F", engine.getItemLabel(Item.ITEM_3));
+        Assert.assertEquals("W", engine.getItemLabel(Item.ITEM_2));
+        Assert.assertEquals("G", engine.getItemLabel(Item.ITEM_1));
+        Assert.assertEquals("B", engine.getItemLabel(Item.ITEM_0));
+
+    }
+
+    @Test
+    public void getItemLocation() {
+        engine.loadBoat(Item.ITEM_3);
+        Assert.assertEquals(Location.START, engine.getItemLocation(Item.ITEM_1));
+        engine.loadBoat(Item.ITEM_1);
+        Assert.assertEquals(Location.BOAT, engine.getItemLocation(Item.ITEM_1));
+
+    }
+
+    @Test
+    public void setItemLocation() {
+        engine.loadBoat(Item.ITEM_3);
+        Assert.assertEquals(Location.START, engine.getItemLocation(Item.ITEM_1));
+        engine.setItemLocation(Item.ITEM_3,Location.FINISH);
+        Assert.assertEquals(Location.FINISH, engine.getItemLocation(Item.ITEM_3));
+    }
+
+    @Test
+    public void reset(){
+        engine.gamePlayers.forEach((item, value) -> {
+            value.setLocation(Location.FINISH);
+        });
+        engine.resetGame();
+        engine.gamePlayers.forEach((item, value) -> {
+            Assert.assertEquals(Location.START, engine.getItemLocation(item));
+        });
+    }
+
+    @Test
+    public void rowBoat(){
+        engine.setItemLocation(Item.ITEM_3,Location.START);
+        engine.setItemLocation(Item.ITEM_1,Location.BOAT);
+        engine.setItemLocation(Item.ITEM_2,Location.BOAT);
+        engine.rowBoat();
+        Assert.assertEquals(Location.START, engine.getBoatLocation());
+
+        engine.setItemLocation(Item.ITEM_3,Location.BOAT);
+        engine.setItemLocation(Item.ITEM_1,Location.BOAT);
+        engine.rowBoat();
+        Assert.assertEquals(Location.FINISH, engine.getBoatLocation());
+    }
+
+    @Test
+    public void loadBoat(){
+        engine.loadBoat(Item.ITEM_3);
+        engine.loadBoat(Item.ITEM_1);
+        engine.loadBoat(Item.ITEM_2);
+        Assert.assertEquals(Location.START, engine.getItemLocation(Item.ITEM_2));
+        Assert.assertEquals(Location.BOAT, engine.getItemLocation(Item.ITEM_3));
+        Assert.assertEquals(Location.BOAT, engine.getItemLocation(Item.ITEM_1));
+
+    }
 }

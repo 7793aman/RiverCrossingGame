@@ -25,7 +25,7 @@ public abstract class AbstractGameEngine implements GameEngine{
 
     @Override
     public Location getItemLocation(Item item) {
-        return gamePlayers.get(item).getItemLocation();
+        return gamePlayers.get(item).getLocation();
     }
 
     @Override
@@ -40,17 +40,18 @@ public abstract class AbstractGameEngine implements GameEngine{
 
     @Override
     public void unloadBoat(Item id) {
-        if (gamePlayers.get(id).getItemLocation() == Location.BOAT) {
+        if (gamePlayers.get(id).getLocation() == Location.BOAT) {
             gamePlayers.get(id).setLocation(boatLocation);
         }
     }
 
     @Override
     public void loadBoat(Item item) {
-        if (gamePlayers.get(item).getItemLocation() == boatLocation) {
+        if (gamePlayers.get(item).getLocation() == boatLocation) {
             Integer itemsOnBoat = 0;
             for (Item val : Item.values()) {
-                if (val != item && gamePlayers.get(val).getItemLocation() == Location.BOAT) {
+                if (!(val.ordinal() < numberOfItems())) break;
+                if (val != item && gamePlayers.get(val).getLocation() == Location.BOAT) {
                     itemsOnBoat += 1;
                 }
             }
@@ -63,7 +64,7 @@ public abstract class AbstractGameEngine implements GameEngine{
     public void rowBoat() {
         Boolean anyoneOnBoat = false;
         for(Item item : Item.values()){
-            if(gamePlayers.get(item).getItemLocation() == Location.BOAT){
+            if(gamePlayers.get(item).getLocation() == Location.BOAT){
                 anyoneOnBoat = true;
                 break;
             }
@@ -74,7 +75,7 @@ public abstract class AbstractGameEngine implements GameEngine{
 
     @Override
     public boolean gameIsWon() {
-        return gamePlayers.values().stream().allMatch(x -> x.getItemLocation() == Location.FINISH);
+        return gamePlayers.values().stream().allMatch(x -> x.getLocation() == Location.FINISH);
     }
 
     @Override
